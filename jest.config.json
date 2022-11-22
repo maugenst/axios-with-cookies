@@ -1,0 +1,20 @@
+{
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["jest-extended/all"],
+    "testMatch": [
+        "**/*.spec.ts"
+    ],
+    "testPathIgnorePatterns": ["/.+tests-.+\\.d\\.ts"],
+    "transform": {
+        "^.+\\.(ts|tsx)$": ["ts-jest", {
+            "diagnostics": false,
+            "tsconfig": "tsconfig.json"
+        }]
+    },
+    "rootDir": "./",
+    "globalSetup": "./jest.setup.ts",
+    "forceExit": true,
+    "silent": true,
+    "maxWorkers": "80%",
+    "testTimeout": 1800000
+}
