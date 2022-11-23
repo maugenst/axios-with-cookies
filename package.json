@@ -1,6 +1,6 @@
 {
   "name": "axios-with-cookies",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fork of axios-cookiejar-support with configurable http(s)-agent",
   "main": "dist/index.js",
   "directories": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "swc src -d dist",
+    "build": "tsc",
     "pretest": "npm run build",
     "test": "ava"
   },
@@ -48,8 +48,6 @@
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.3.19",
     "@types/node": "^18.11.9",
     "@types/tough-cookie": "^4.0.2",
     "ava": "4.3.3",
