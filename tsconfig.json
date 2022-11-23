@@ -1,36 +1,13 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
-    "typeRoots": ["./node_modules/@types", "./@types"],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "incremental": true,
-    "target": "es2018",
-    "sourceMap": true,
     "declaration": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "removeComments": true,
-    "pretty": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strictPropertyInitialization": false,
-    "newLine": "LF",
-    "strict": true,
-    "importHelpers": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": false,
-    "useUnknownInCatchVariables": false
+    "lib": ["ESNext"],
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "target": "ESNext",
+    "types": ["@types/node"]
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "./node_modules",
-    "./node_modules/*"
-  ]
+  "extends": "@3846masa/configs/tsconfig.json",
+  "include": ["src/**/*"]
 }

@@ -14,7 +14,6 @@ http(s)-agents. It is based on the initial work of Masahiro Miyashiro (@3846masa
 
 - [Install](#install)
 - [Usage](#usage)
-    - [Extended Request Config](#extended-request-config)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -26,18 +25,33 @@ npm install axios tough-cookie axios-with-cookies
 
 ## Usage
 
-```js
-import axios from 'axios';
-import { wrapper } from 'axios-with-cookies';
-import { CookieJar } from 'tough-cookie';
+```ts
+import * as axios from 'axios';
+import {AxiosInstance, AxiosStatic} from 'axios';
+import {CookieJar, MemoryCookieStore} from 'tough-cookie';
+import {wrapper} from 'axios-cookiejar-support';
 
-const jar = new CookieJar();
-const client = wrapper(axios.create({ 
-    jar,
-}));
+const axiosInstance: AxiosInstance = ((axios as unknown) as AxiosStatic).create({
+  httpsAgent: new HttpsCookieAgent({
+    cookies: {
+      jar: new CookieJar(new MemoryCookieStore(), {looseMode: true})      
+    },
+    rejectUnauthorized: false,
+    keepAlive: true,
+    timeout: 100000
+  })
+});
+this.client = wrapper(axiosInstance);
 
-await client.get('https://example.com');
+await this.client.get('https://example.com');
 ```
 
 See [examples](./examples) for more details.
 
+## Contributing
+
+PRs welcome.
+
+## License
+
+[MIT (c) maugenst](./LICENSE)

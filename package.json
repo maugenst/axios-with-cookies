@@ -8,12 +8,24 @@
   },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "tsc",
-    "test": "npm test"
+    "build": "swc src -d dist",
+    "pretest": "npm run build",
+    "test": "ava"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maugenst/axios-with-cookies.git"
+  },
+  "ava": {
+    "files": [
+      "**/__tests__/*.spec.ts"
+    ],
+    "typescript": {
+      "rewritePaths": {
+        "src/": "dist/"
+      },
+      "compile": false
+    }
   },
   "keywords": [
     "axios",
@@ -24,37 +36,39 @@
     "http-agent",
     "https-agent"
   ],
-  "author": [
-    "3846masa <3846masahiro+git@gmail.com>",
-    "maugenst <marius.augenstein@gmail.com>"
-  ],
+  "author": "maugenst <marius.augenstein@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/maugenst/axios-with-cookies/issues"
   },
   "homepage": "https://github.com/maugenst/axios-with-cookies#readme",
   "devDependencies": {
-    "@swc/jest": "^0.2.23",
+    "@3846masa/configs": "github:3846masa/configs#e851f22d49eb97a900a41e9803575eb3d6753f6c",
+    "@ava/typescript": "3.0.1",
+    "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/exec": "6.0.3",
+    "@semantic-release/git": "10.0.1",
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.3.19",
     "@types/node": "^18.11.9",
     "@types/tough-cookie": "^4.0.2",
+    "ava": "4.3.3",
     "axios": "^1.1.3",
-    "jest": "^29.3.1",
-    "jest-extended": "^3.1.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
+    "semantic-release": "19.0.5",
     "tough-cookie": "^4.1.2",
-    "ts-jest": "^29.0.3",
     "typescript": "^4.9.3"
   },
   "dependencies": {
     "http-cookie-agent": "^4.0.2"
   },
   "peerDependencies": {
-    "axios": ">=0.20.0",
+    "axios": ">=1.1.0",
     "tough-cookie": ">=4.0.0"
   },
   "engines": {
-    "node": ">=14.18.0 <15.0.0 || >=16.0.0"
+    "node": ">=16.0.0"
   },
   "publishConfig": {
     "access": "public"
