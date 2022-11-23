@@ -150,50 +150,6 @@ test.serial('should send cookies even when target is same host but different por
     t.plan(1);
 });
 
-test.serial('should throw error when config.httpAgent was assigned', async (t) => {
-    const {port, server} = await createTestServer([
-        (_req, res) => {
-            res.end();
-        }
-    ]);
-
-    const jar = new CookieJar();
-
-    await t.throwsAsync(
-        async () => {
-            await axios.get(`http://localhost:${port}`, {httpAgent: new http.Agent(), jar});
-        },
-        {
-            message: 'axios-cookiejar-support does not support for use with other http(s).Agent.'
-        }
-    );
-
-    t.plan(1);
-    server.close();
-});
-
-test.serial('should throw error when config.httpsAgent was assigned', async (t) => {
-    const {port, server} = await createTestServer([
-        (_req, res) => {
-            res.end();
-        }
-    ]);
-
-    const jar = new CookieJar();
-
-    await t.throwsAsync(
-        async () => {
-            await axios.get(`http://localhost:${port}`, {httpsAgent: new https.Agent(), jar});
-        },
-        {
-            message: 'axios-cookiejar-support does not support for use with other http(s).Agent.'
-        }
-    );
-
-    t.plan(1);
-    server.close();
-});
-
 test.serial('should throw error when config.jar was assigned with boolean', async (t) => {
     const {port, server} = await createTestServer([
         (_req, res) => {
@@ -217,7 +173,7 @@ test.serial('should throw error when config.jar was assigned with boolean', asyn
     server.close();
 });
 
-test.serial('should not throw error when config.httpAgent is instance of HttpCookieAgent', async (t) => {
+test.serial('should work when config.httpAgent is instance of HttpCookieAgent', async (t) => {
     const {port, server} = await createTestServer([
         (_req, res) => {
             res.end();
@@ -242,7 +198,7 @@ test.serial('should not throw error when config.httpAgent is instance of HttpCoo
     server.close();
 });
 
-test.serial('should not throw error when config.httpsAgent is instance of HttpsCookieAgent', async (t) => {
+test.serial('should work when config.httpsAgent is instance of HttpsCookieAgent', async (t) => {
     const {port, server} = await createTestServer([
         (_req, res) => {
             res.end();
@@ -264,5 +220,66 @@ test.serial('should not throw error when config.httpsAgent is instance of HttpsC
     });
 
     t.plan(3);
+    server.close();
+});
+
+test.serial('should work when config.httpAgent is instance of http.Agent (node-native)', async (t) => {
+    const {port, server} = await createTestServer([
+        (_req, res) => {
+            res.end();
+        },
+        (_req, res) => {
+            res.write('success');
+            res.end();
+        }
+    ]);
+
+    const jar = new CookieJar();
+
+    await t.notThrowsAsync(async () => {
+        const {config} = await axios.get(`http://localhost:${port}`, {
+            jar,
+            httpAgent: new http.Agent({
+                keepAlive: true,
+                timeout: 100000
+            })
+        });
+        // simulate request retry
+        const {data} = await axios.get(`http://localhost:${port}`, {httpAgent: config.httpAgent, jar});
+        t.assert(data === 'success', '');
+    });
+
+    t.plan(2);
+    server.close();
+});
+
+test.serial('should work when config.httpsAgent is instance of https.Agent (node-native)', async (t) => {
+    const {port, server} = await createTestServer([
+        (_req, res) => {
+            res.end();
+        },
+        (_req, res) => {
+            res.write('success');
+            res.end();
+        }
+    ]);
+
+    const jar = new CookieJar();
+
+    await t.notThrowsAsync(async () => {
+        const {config} = await axios.get(`http://localhost:${port}`, {
+            jar,
+            httpsAgent: new https.Agent({
+                rejectUnauthorized: false,
+                keepAlive: true,
+                timeout: 100000
+            })
+        });
+        // simulate request retry
+        const {data} = await axios.get(`http://localhost:${port}`, {httpsAgent: config.httpsAgent, jar});
+        t.assert(data === 'success', '');
+    });
+
+    t.plan(2);
     server.close();
 });

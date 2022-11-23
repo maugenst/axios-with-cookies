@@ -1,6 +1,6 @@
 {
   "name": "axios-with-cookies",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fork of axios-cookiejar-support with configurable http(s)-agent",
   "main": "dist/index.js",
   "directories": {
